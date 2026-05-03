@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginUser = exports.createUser = void 0;
+exports.getUserWithId = exports.getAllUsers = exports.LoginUser = exports.createUser = void 0;
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const createUser = async (data) => {
@@ -62,4 +62,30 @@ const LoginUser = async (data) => {
     }
 };
 exports.LoginUser = LoginUser;
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await user_1.User.find({});
+        return res.status(200).json({
+            success: true,
+            users,
+        });
+    }
+    catch (error) {
+        console.error("error while fetching data =>", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch users",
+        });
+    }
+};
+exports.getAllUsers = getAllUsers;
+const getUserWithId = async (userId) => {
+    try {
+        const data = user_1.User.findById({ userId });
+    }
+    catch (error) {
+        console.error("error while fetching data  =>" + error);
+    }
+};
+exports.getUserWithId = getUserWithId;
 //# sourceMappingURL=user.js.map

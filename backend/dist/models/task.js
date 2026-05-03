@@ -58,6 +58,11 @@ const TaskSchema = new mongoose_1.Schema({
         ref: "Project",
         required: true,
     },
+    assignedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
     dueDate: {
         type: Date,
     },

@@ -20,6 +20,7 @@ authRouter.post("/signup", async (req, res) => {
         }
         const payload = {
             id: result.userId,
+            role: result.role
         };
         const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET);
         return res.status(200).json({
@@ -41,6 +42,7 @@ authRouter.post("/login", async (req, res) => {
         }
         const payload = {
             id: result.userId,
+            role: result.role
         };
         const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET);
         return res.status(200).json({

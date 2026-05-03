@@ -1,29 +1,17 @@
 import { Request, Response } from "express";
 import { Task } from "../models/task";
 import { Project } from "../models/project";
+import mongoose from "mongoose";
 
 export const createTask = async (req: Request, res: Response) => {
   try {
-    const { title, description, projectId, assignedTo } = req.body;
+    const { title, description, assignedTo, dueDate } = req.body;
     const userId = (req as any).user?.id;
 
-    if (!title || !projectId) {
-      return res.status(400).json({ message: "Title and project required" });
-    }
-
-    //check project exists
-    const project = await Project.findById(projectId);
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
-    }
-
-    // ensure assigned user is part of project
-    if (
-      assignedTo &&
-      !project.members.some((id) => id.toString() === assignedTo)
-    ) {
+    if (!title || !assignedTo) {
       return res.status(400).json({
-        message: "User not part of project",
+        isSuccess: false,
+        message: "Title and assigned user required",
       });
     }
 
@@ -33,6 +21,8 @@ export const createTask = async (req: Request, res: Response) => {
       assignedTo,
       assignedBy: userId,
       status: "TODO",
+      projectId: new mongoose.Types.ObjectId(), // dummy
+      dueDate,
     });
 
     return res.status(201).json({
@@ -41,7 +31,10 @@ export const createTask = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("createTask error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      isSuccess: false,
+      message: "Internal server error",
+    });
   }
 };
 export const updateTaskStatus = async (req: Request, res: Response) => {
@@ -97,5 +90,53 @@ export const getTasksByProject = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("getTasksByProject error:", error);
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getAllTasks = async (req: Request, res: Response) => {
+  try {
+    const tasks = await Task.find()
+      .populate("assignedTo", "name email")
+      .populate("assignedBy", "name email");
+
+    return res.status(200).json({
+      isSuccess: true,
+      count: tasks.length,
+      tasks,
+    });
+  } catch (error) {
+    console.error("getAllTasks error:", error);
+    return res.status(500).json({
+      isSuccess: false,
+      message: "Failed to fetch tasks",
+    });
+  }
+};
+
+export const getMyTasks = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        isSuccess: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const tasks = await Task.find({ assignedTo: userId })
+      .populate("assignedBy", "name email");
+
+    return res.status(200).json({
+      isSuccess: true,
+      count: tasks.length,
+      tasks,
+    });
+  } catch (error) {
+    console.error("getMyTasks error:", error);
+    return res.status(500).json({
+      isSuccess: false,
+      message: "Failed to fetch tasks",
+    });
   }
 };
