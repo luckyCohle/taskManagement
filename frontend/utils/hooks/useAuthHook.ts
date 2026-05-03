@@ -33,7 +33,7 @@ export const useAuth = (allowedRoles: string[]) => {
     } catch {
       router.replace("auth/login");
     }
-  }, [allowedRoles, router]);
+  }, [ router]);
 
   return { user, authorized };
 };
