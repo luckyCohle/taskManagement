@@ -7,6 +7,7 @@ export interface ITask extends Document {
   description?: string;
   status: TaskStatus;
   assignedTo: mongoose.Types.ObjectId;
+  assignedBy: mongoose.Types.ObjectId;
   projectId: mongoose.Types.ObjectId;
   dueDate?: Date;
 }
@@ -33,6 +34,11 @@ const TaskSchema = new Schema<ITask>(
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
+      required: true,
+    },
+    assignedBy:{
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     dueDate: {

@@ -59,4 +59,19 @@ export const LoginUser = async (data: LoginUserType): Promise<UserResponse> => {
     }
 }
 
+export const getAllUsers = async()=>{
+    try {
+        const users = User.find({});
+        return users;
+    } catch (error) {
+        console.error("error while fetching data =>" + error);
+    }
+}
+export const getUserWithId = async(userId:string)=>{
+    try {
+        const data = User.findById({userId});
+    } catch (error) {
+        console.error("error while fetching data  =>" + error);
+    }
+    }
 

@@ -1,9 +1,9 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Mongoose, Schema } from "mongoose";
 
 export interface IProject extends Document {
   name: string;
   createdBy: mongoose.Types.ObjectId;
-  members:Schema.Types.ObjectId[];
+  members:mongoose.Types.ObjectId[];
 }
 
 const ProjectSchema = new Schema<IProject>(
@@ -19,7 +19,7 @@ const ProjectSchema = new Schema<IProject>(
     },
     members: [
   {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Types.ObjectId,
     ref: "User"
   }
 ]

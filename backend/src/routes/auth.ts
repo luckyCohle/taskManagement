@@ -26,7 +26,7 @@ authRouter.post("/signup", async (req: Request, res: Response) => {
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET as string);
         return res.status(200).json({
-            ...result, token 
+            ...result, token , role:result.role
         });
     } catch (error) {
         console.error("Signup route error:", error);
@@ -50,7 +50,7 @@ authRouter.post("/login", async (req: Request, res: Response) => {
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET as string)
         return res.status(200).json({
-            ...result, token 
+            ...result, token , role:result.role
         });
     } catch (error) {
         console.error("Login route error:", error);
