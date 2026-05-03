@@ -18,7 +18,7 @@ export const useAuth = (allowedRoles: string[]) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      router.replace("/login");
+      router.replace("auth/login");
       return;
     }
 
@@ -31,7 +31,7 @@ export const useAuth = (allowedRoles: string[]) => {
 
       setUser(decoded);
     } catch {
-      router.replace("/login");
+      router.replace("auth/login");
     }
   }, [allowedRoles, router]);
 
