@@ -76,16 +76,15 @@ export default function AdminDashboard() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3.5 mb-6">
-            <div>Total: {total}</div>
-            <div>In Progress: {inProgress}</div>
-            <div>Done: {done} ({completionRate}%)</div>
+         <div className="flex items-center justify-between mb-3.5">
+            <h2 className="text-[#26215C] text-base font-semibold">All Tasks</h2>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-1.5 bg-[#534AB7] hover:bg-[#3C3489] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            >
+              <span className="text-base leading-none">+</span> New Task
+            </button>
           </div>
-
-          <button onClick={() => setIsModalOpen(true)}>
-            + New Task
-          </button>
-
           <div>
             {visibleTasks.map((task) => (
               <AdminTaskCard key={task.id} task={task} />
