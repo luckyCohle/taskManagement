@@ -9,23 +9,23 @@ import { taskType } from "@/utils/types/task";
 import { getAllTasks } from "@/utils/api/task";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "@/utils/hooks/useAuthHook";
-import { useRouter } from "next/navigation"; // ✅ FIXED
+import { useRouter } from "next/navigation"; 
 
 const FILTERS = ["ALL", "TODO", "IN_PROGRESS", "DONE"] as const;
 
 export default function AdminDashboard() {
   const router = useRouter();
 
-  const { user, authorized } = useAuth(["ADMIN"]); // ✅ FIXED
+  const { user, authorized } = useAuth(["ADMIN"]); 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [tasks, setTasks] = useState<taskType[]>([]);
   const [users, setUser] = useState<UserListElement[]>([]);
 
-  // ✅ Handle auth safely
+  //
   useEffect(() => {
-    if (!user) return; // wait until decoded
+    if (!user) return; 
 
     if (!authorized) {
       router.replace("/member");
@@ -33,7 +33,7 @@ export default function AdminDashboard() {
     }
   }, [user, authorized, router]);
 
-  // ✅ Fetch data only when user is valid
+  // Fetch data only when user is valid
   useEffect(() => {
     if (!user || !authorized) return;
 
@@ -61,7 +61,7 @@ export default function AdminDashboard() {
       ? tasks
       : tasks.filter((t) => t.status === activeFilter);
 
-  // ✅ Prevent rendering before auth resolves
+  // Prevent rendering before auth resolves
   if (!user) return <p>Loading...</p>;
 
   return (
